@@ -4,6 +4,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
+export const dynamic = 'force-dynamic';
+
 interface Attribute {
   key: string;
   values: string[];

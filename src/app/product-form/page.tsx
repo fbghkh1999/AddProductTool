@@ -4,6 +4,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getAccessToken } from '@/utils/auth';
 
+export const dynamic = 'force-dynamic';
+
 interface Category {
   cat_id: number;
   cat_title: string;
