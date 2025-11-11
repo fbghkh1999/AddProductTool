@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { getAccessToken } from '@/utils/auth';
 
 export const dynamic = 'force-dynamic';
@@ -20,7 +20,7 @@ interface Category {
   } | null;
 }
 
-export default function ProductFormPage() {
+function ProductFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [submitting, setSubmitting] = useState(false);
@@ -487,5 +487,20 @@ export default function ProductFormPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProductFormPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-slate-200 border-t-[#1C2575] rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-lg text-slate-600">در حال بارگذاری...</p>
+        </div>
+      </div>
+    }>
+      <ProductFormContent />
+    </Suspense>
   );
 }
