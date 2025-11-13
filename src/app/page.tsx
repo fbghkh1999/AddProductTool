@@ -112,6 +112,18 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 relative">
+      <div className="absolute top-4 left-4 z-10">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-slate-200 rounded-xl hover:border-red-500 hover:bg-red-50 transition-all duration-300 shadow-md hover:shadow-lg group"
+        >
+          <svg className="w-4 h-4 text-slate-600 group-hover:text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          <span className="text-sm font-medium text-slate-700 group-hover:text-red-600">خروج</span>
+        </button>
+      </div>
+
       {loading && (
         <div className="fixed inset-0 bg-white/90 backdrop-blur-sm z-50 flex items-center justify-center">
           <div className="flex flex-col items-start gap-5 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
