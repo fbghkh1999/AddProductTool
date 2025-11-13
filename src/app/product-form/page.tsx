@@ -120,11 +120,18 @@ function ProductFormContent() {
         const uploadFormData = new FormData();
         uploadFormData.append('imageUrl', productData.imageUrl);
 
+        const token = getAccessToken();
+        if (!token) {
+          alert('لطفا ابتدا وارد شوید');
+          router.push('/login');
+          return;
+        }
+
         const uploadResponse = await fetch('/api/upload-image', {
           method: 'POST',
-          // headers: {
-          //   'Authorization': `Bearer ${token}`,
-          // },
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
           body: uploadFormData,
         });
 
@@ -163,19 +170,18 @@ function ProductFormContent() {
 
       console.log('Create data to send:', createData);
 
-      // OAuth disabled - using hardcoded token in API
-      // const token = getAccessToken();
-      // if (!token) {
-      //   alert('لطفا ابتدا وارد شوید');
-      //   router.push('/login');
-      //   return;
-      // }
+      const token = getAccessToken();
+      if (!token) {
+        alert('لطفا ابتدا وارد شوید');
+        router.push('/login');
+        return;
+      }
 
       const createResponse = await fetch('/api/create-product', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // 'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(createData),
       });

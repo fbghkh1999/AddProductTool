@@ -14,24 +14,21 @@ export default function Home() {
   const [checkingAuth, setCheckingAuth] = useState(true);
 
   useEffect(() => {
-    // OAuth authentication disabled for now - using hardcoded token
-    // console.log('🔍 Checking authentication on main page');
-    // const token = localStorage.getItem('basalam_token');
-    // console.log('Token status:', {
-    //   exists: !!token,
-    //   preview: token ? token.substring(0, 20) + '...' : null,
-    //   isAuthenticated: isAuthenticated()
-    // });
+    console.log('🔍 Checking authentication on main page');
+    const token = localStorage.getItem('basalam_token');
+    console.log('Token status:', {
+      exists: !!token,
+      preview: token ? token.substring(0, 20) + '...' : null,
+      isAuthenticated: isAuthenticated()
+    });
 
-    // if (!isAuthenticated()) {
-    //   console.log('❌ Not authenticated - redirecting to login');
-    //   router.push('/login');
-    // } else {
-    //   console.log('✅ Authenticated - showing main page');
-    //   setCheckingAuth(false);
-    // }
-
-    setCheckingAuth(false);
+    if (!isAuthenticated()) {
+      console.log('❌ Not authenticated - redirecting to login');
+      router.push('/login');
+    } else {
+      console.log('✅ Authenticated - showing main page');
+      setCheckingAuth(false);
+    }
   }, [router]);
 
   const handleLogout = () => {
