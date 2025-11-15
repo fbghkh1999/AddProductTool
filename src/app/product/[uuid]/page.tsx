@@ -44,6 +44,25 @@ export default function ProductDetailsPage() {
 
         const data = await response.json();
         console.log('Product data received:', data);
+
+        // Check if product has no attributes and no description - skip to form
+        const hasAttributes = data.attributes && Array.isArray(data.attributes) && data.attributes.length > 0;
+        const hasDescription = data.description && data.description.trim() !== '';
+
+        if (!hasAttributes && !hasDescription) {
+          console.log('No attributes or description - skipping to product form');
+          const productData = {
+            name: data.title,
+            imageUrl: data.image_urls && data.image_urls.length > 0 ? data.image_urls[0] : null,
+            attributes: [],
+            description: '',
+            pgp_uuid: data.uuid,
+          };
+          const dataParam = encodeURIComponent(JSON.stringify(productData));
+          router.push(`/product-form?data=${dataParam}`);
+          return;
+        }
+
         setProduct(data);
 
         const initialValues: { [key: string]: string } = {};
