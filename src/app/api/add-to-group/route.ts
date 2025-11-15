@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
+    const token = request.headers.get('Authorization');
+    if (!token) {
+      return NextResponse.json(
+        { error: 'توکن احراز هویت الزامی است' },
+        { status: 401 }
+      );
+    }
+
     const { pgp_uuid, product_id } = await request.json();
 
     if (!pgp_uuid) {
@@ -28,6 +36,7 @@ export async function POST(request: NextRequest) {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'Authorization': token,
       },
       body: JSON.stringify({
         product_id: product_id
