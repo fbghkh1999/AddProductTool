@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const response = await fetch('https://core.basalam.com/v4/vendor/info', {
+    const response = await fetch('https://core.basalam.com/v4/vendors/me', {
       method: 'GET',
       headers: {
         'accept': 'application/json',
