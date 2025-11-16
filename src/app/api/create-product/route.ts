@@ -22,8 +22,6 @@ export async function POST(request: NextRequest) {
       primary_price,
       stock,
       weight,
-      brief,
-      is_wholesale,
       vendor_id,
     } = body;
 
@@ -50,7 +48,6 @@ export async function POST(request: NextRequest) {
       photo: photoId,
       photos: [photoId],
       description: description || '',
-      brief: brief || null,
       attributes: attributes || [],
       category_id: category_id,
       status: 2976,
@@ -59,7 +56,6 @@ export async function POST(request: NextRequest) {
       primary_price: primary_price || 10000,
       stock: stock || 0,
       weight: weight,
-      is_wholesale: is_wholesale,
     };
 
     console.log('Product data being sent:', JSON.stringify(productData, null, 2));

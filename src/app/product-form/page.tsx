@@ -35,8 +35,6 @@ function ProductFormContent() {
     primary_price: '10000',
     stock: '1',
     weight: '',
-    brief: '',
-    is_wholesale: false,
   });
 
   const [productData, setProductData] = useState<any>(null);
@@ -47,8 +45,7 @@ function ProductFormContent() {
       try {
         const parsed = JSON.parse(decodeURIComponent(data));
         setProductData(parsed);
-        const timestamp = new Date().getTime().toString().slice(-6);
-        setProductName(`${parsed.name} - ${timestamp}`);
+        setProductName(parsed.name);
       } catch (error) {
         console.error('Error parsing product data:', error);
         router.push('/');
@@ -178,8 +175,6 @@ function ProductFormContent() {
         primary_price: formData.primary_price ? parseInt(formData.primary_price) : null,
         stock: formData.stock ? parseInt(formData.stock) : null,
         weight: formData.weight ? parseFloat(formData.weight) : null,
-        brief: formData.brief || null,
-        is_wholesale: formData.is_wholesale,
         vendor_id: parseInt(vendorId),
       };
 
@@ -315,9 +310,6 @@ function ProductFormContent() {
                   {nameError}
                 </p>
               )}
-              <p className="text-xs text-slate-500 mt-1">
-                برای جلوگیری از تکراری بودن، یک شناسه منحصر به فرد به نام محصول اضافه شده است
-              </p>
             </div>
 
             <div className="col-span-2">
@@ -379,14 +371,15 @@ function ProductFormContent() {
 
               <div>
                 <label className="block text-sm font-bold text-slate-800 mb-2">
-                  مدت آماده‌سازی (روز) <span className="text-red-500">*</span>
+                  وزن محصول (گرم) <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
                   required
-                  value={formData.preparation_days}
-                  onChange={(e) => setFormData({ ...formData, preparation_days: e.target.value })}
-                  placeholder="تعداد روز"
+                  min="1"
+                  value={formData.weight}
+                  onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
+                  placeholder="وزن محصول"
                   className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
                 />
               </div>
@@ -401,6 +394,21 @@ function ProductFormContent() {
                   value={formData.package_weight}
                   onChange={(e) => setFormData({ ...formData, package_weight: e.target.value })}
                   placeholder="وزن به گرم"
+                  className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
+                />
+                <p className="text-xs text-slate-500 mt-1">وزن بسته‌بندی باید بیشتر از وزن محصول باشد</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-slate-800 mb-2">
+                  مدت آماده‌سازی (روز) <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  required
+                  value={formData.preparation_days}
+                  onChange={(e) => setFormData({ ...formData, preparation_days: e.target.value })}
+                  placeholder="تعداد روز"
                   className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
                 />
               </div>
@@ -435,48 +443,6 @@ function ProductFormContent() {
                   className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
                 />
               </div>
-
-              <div>
-                <label className="block text-sm font-bold text-slate-800 mb-2">
-                  وزن محصول (گرم) <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="number"
-                  required
-                  min="1"
-                  value={formData.weight}
-                  onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
-                  placeholder="وزن محصول"
-                  className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
-                />
-                <p className="text-xs text-slate-500 mt-1">وزن بسته‌بندی باید بیشتر از وزن محصول باشد</p>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-slate-800 mb-2">
-                توضیحات کوتاه
-              </label>
-              <textarea
-                value={formData.brief}
-                onChange={(e) => setFormData({ ...formData, brief: e.target.value })}
-                placeholder="توضیحات کوتاه محصول"
-                rows={3}
-                className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all resize-none"
-              />
-            </div>
-
-            <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl">
-              <input
-                type="checkbox"
-                id="is_wholesale"
-                checked={formData.is_wholesale}
-                onChange={(e) => setFormData({ ...formData, is_wholesale: e.target.checked })}
-                className="w-5 h-5 text-[#1C2575] border-slate-300 rounded focus:ring-[#1C2575]"
-              />
-              <label htmlFor="is_wholesale" className="text-sm font-medium text-slate-700 cursor-pointer">
-                محصول عمده‌فروشی است
-              </label>
             </div>
 
             <div className="pt-6 border-t border-slate-200">
