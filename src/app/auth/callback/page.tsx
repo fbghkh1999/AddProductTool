@@ -100,10 +100,9 @@ function CallbackContent() {
 
           console.log('🔄 STEP 5: Fetching vendor profile');
           try {
-            const profileResponse = await fetch('https://core.basalam.ir/v3/users/me', {
+            const profileResponse = await fetch('/api/vendor-profile', {
               method: 'GET',
               headers: {
-                'accept': 'application/json',
                 'Authorization': `Bearer ${data.access_token}`,
               },
             });
