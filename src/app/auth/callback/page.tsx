@@ -100,13 +100,15 @@ function CallbackContent() {
 
           console.log('🔄 STEP 5: Fetching vendor profile');
           try {
-            const profileResponse = await fetch('https://core.basalam.com/v3/users/me', {
+            const profileResponse = await fetch('https://core.basalam.ir/v3/users/me', {
               method: 'GET',
               headers: {
                 'accept': 'application/json',
+                'Authorization': `Bearer ${data.access_token}`,
               },
-              credentials: 'include',
             });
+
+            console.log('Profile API response status:', profileResponse.status);
 
             if (profileResponse.ok) {
               const profileData = await profileResponse.json();
@@ -119,16 +121,11 @@ function CallbackContent() {
                 console.error('⚠️ Vendor ID not found in profile response');
               }
             } else {
-              console.error('⚠️ Failed to fetch vendor profile:', profileResponse.status);
-              console.log('⚠️ Using hardcoded vendor ID as fallback');
-              localStorage.setItem('basalam_vendor_id', '1267234');
-              console.log('✅ Vendor ID saved (hardcoded): 1267234');
+              const errorText = await profileResponse.text();
+              console.error('⚠️ Failed to fetch vendor profile:', profileResponse.status, errorText);
             }
           } catch (profileError) {
             console.error('⚠️ Error fetching vendor profile:', profileError);
-            console.log('⚠️ Using hardcoded vendor ID as fallback');
-            localStorage.setItem('basalam_vendor_id', '1267234');
-            console.log('✅ Vendor ID saved (hardcoded): 1267234');
           }
 
           console.log('🔄 STEP 6: Redirecting to main page');
