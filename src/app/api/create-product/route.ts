@@ -24,9 +24,18 @@ export async function POST(request: NextRequest) {
       weight,
       brief,
       is_wholesale,
+      vendor_id,
     } = body;
 
-    const vendorId = 1267234;
+    if (!vendor_id) {
+      console.error('Vendor ID is missing!');
+      return NextResponse.json(
+        { error: 'شناسه فروشنده الزامی است' },
+        { status: 400 }
+      );
+    }
+
+    const vendorId = vendor_id;
 
     if (!photoId) {
       console.error('Photo ID is missing!');

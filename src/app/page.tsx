@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { isAuthenticated, clearTokens } from '@/utils/auth';
+import { isAuthenticated, clearTokens, getAccessToken } from '@/utils/auth';
 
 export default function Home() {
   const router = useRouter();
@@ -75,6 +75,13 @@ export default function Home() {
     setLoading(true);
 
     try {
+      const token = getAccessToken();
+      if (!token) {
+        alert('لطفا ابتدا وارد شوید');
+        router.push('/login');
+        return;
+      }
+
       const formData = new FormData();
       formData.append('title', title);
       if (image) {
@@ -88,6 +95,9 @@ export default function Home() {
 
       const response = await fetch('/api/search', {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
         body: formData,
       });
 

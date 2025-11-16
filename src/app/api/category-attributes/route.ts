@@ -4,6 +4,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const categoryId = searchParams.get('category_id');
+    const vendorId = searchParams.get('vendor_id');
 
     if (!categoryId) {
       return NextResponse.json(
@@ -12,7 +13,13 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const vendorId = 1267234;
+    if (!vendorId) {
+      return NextResponse.json(
+        { error: 'شناسه فروشنده الزامی است' },
+        { status: 400 }
+      );
+    }
+
     const url = `https://core.basalam.com/api_v2/category/${categoryId}/attributes?vendor_id=${vendorId}&exclude_multi_selects=true`;
 
     console.log('Fetching category attributes from:', url);

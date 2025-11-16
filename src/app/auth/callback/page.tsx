@@ -98,7 +98,31 @@ function CallbackContent() {
             console.log('✅ Refresh token saved');
           }
 
-          console.log('🔄 STEP 5: Redirecting to main page');
+          console.log('🔄 STEP 5: Fetching vendor profile');
+          try {
+            const profileResponse = await fetch('/api/vendor-profile', {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${data.access_token}`,
+              },
+            });
+
+            if (profileResponse.ok) {
+              const profileData = await profileResponse.json();
+              console.log('✅ Vendor profile received:', profileData);
+
+              if (profileData.id) {
+                localStorage.setItem('basalam_vendor_id', profileData.id.toString());
+                console.log('✅ Vendor ID saved:', profileData.id);
+              }
+            } else {
+              console.error('⚠️ Failed to fetch vendor profile, will continue anyway');
+            }
+          } catch (profileError) {
+            console.error('⚠️ Error fetching vendor profile:', profileError);
+          }
+
+          console.log('🔄 STEP 6: Redirecting to main page');
           router.push('/');
         } else {
           console.error('❌ STEP 4: No access_token in response:', data);

@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, Suspense } from 'react';
-import { getAccessToken } from '@/utils/auth';
+import { getAccessToken, getVendorId } from '@/utils/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -153,6 +153,20 @@ function ProductFormContent() {
         }
       }
 
+      const token = getAccessToken();
+      if (!token) {
+        alert('لطفا ابتدا وارد شوید');
+        router.push('/login');
+        return;
+      }
+
+      const vendorId = getVendorId();
+      if (!vendorId) {
+        alert('شناسه فروشنده یافت نشد. لطفا دوباره وارد شوید');
+        router.push('/login');
+        return;
+      }
+
       const createData = {
         name: productName,
         photoId,
@@ -166,16 +180,10 @@ function ProductFormContent() {
         weight: formData.weight ? parseFloat(formData.weight) : null,
         brief: formData.brief || null,
         is_wholesale: formData.is_wholesale,
+        vendor_id: parseInt(vendorId),
       };
 
       console.log('Create data to send:', createData);
-
-      const token = getAccessToken();
-      if (!token) {
-        alert('لطفا ابتدا وارد شوید');
-        router.push('/login');
-        return;
-      }
 
       const createResponse = await fetch('/api/create-product', {
         method: 'POST',

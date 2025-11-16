@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { getAccessToken } from '@/utils/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,8 +32,19 @@ export default function ProductDetailsPage() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        const token = getAccessToken();
+        if (!token) {
+          alert('لطفا ابتدا وارد شوید');
+          router.push('/login');
+          return;
+        }
+
         console.log('Fetching product with UUID:', params.uuid);
-        const response = await fetch(`/api/product/${params.uuid}`);
+        const response = await fetch(`/api/product/${params.uuid}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
 
         console.log('Response status:', response.status);
 

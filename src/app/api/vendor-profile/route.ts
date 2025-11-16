@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  request: NextRequest,
-  context: { params: Promise<{ uuid: string }> }
-) {
+export async function GET(request: NextRequest) {
   try {
     const token = request.headers.get('Authorization');
     if (!token) {
@@ -13,9 +10,7 @@ export async function GET(
       );
     }
 
-    const { uuid } = await context.params;
-
-    const response = await fetch(`https://pgp-search.basalam.com/v1/groups/${uuid}`, {
+    const response = await fetch('https://core.basalam.com/v4/vendor/info', {
       method: 'GET',
       headers: {
         'accept': 'application/json',
@@ -25,9 +20,9 @@ export async function GET(
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Basalam API Error:', response.status, errorText);
+      console.error('Vendor profile API error:', response.status, errorText);
       return NextResponse.json(
-        { error: 'خطا در دریافت اطلاعات محصول' },
+        { error: 'خطا در دریافت اطلاعات فروشنده' },
         { status: response.status }
       );
     }
