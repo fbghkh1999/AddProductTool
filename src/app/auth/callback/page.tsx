@@ -111,9 +111,11 @@ function CallbackContent() {
               const profileData = await profileResponse.json();
               console.log('✅ Vendor profile received:', profileData);
 
-              if (profileData.id) {
-                localStorage.setItem('basalam_vendor_id', profileData.id.toString());
-                console.log('✅ Vendor ID saved:', profileData.id);
+              if (profileData.vendor && profileData.vendor.id) {
+                localStorage.setItem('basalam_vendor_id', profileData.vendor.id.toString());
+                console.log('✅ Vendor ID saved:', profileData.vendor.id);
+              } else {
+                console.error('⚠️ Vendor ID not found in profile response');
               }
             } else {
               console.error('⚠️ Failed to fetch vendor profile, will continue anyway');
