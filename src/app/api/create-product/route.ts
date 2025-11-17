@@ -45,7 +45,6 @@ export async function POST(request: NextRequest) {
 
     const productData = {
       name: name,
-      photo: photoId,
       photos: [photoId],
       description: description || '',
       attributes: attributes || [],

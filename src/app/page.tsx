@@ -224,10 +224,10 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="space-y-6">
-                <div className="flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-8">
+              <div className="space-y-8">
+                <div className="flex flex-col items-center justify-center">
                   <div className="relative">
-                    <label className="group relative flex flex-col items-center justify-center w-48 h-48 sm:w-56 sm:h-56 bg-gradient-to-br from-slate-50 to-slate-100/50 border-2 border-dashed border-slate-300 rounded-2xl cursor-pointer hover:border-[#1C2575] hover:from-blue-50 hover:to-purple-50/30 transition-all duration-300 overflow-hidden">
+                    <label className="group relative flex flex-col items-center justify-center w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 border-4 border-dashed border-[#1C2575] rounded-3xl cursor-pointer hover:border-[#2a3699] hover:shadow-2xl hover:shadow-blue-900/30 transition-all duration-300 overflow-hidden">
                       <input
                         type="file"
                         accept="image/*"
@@ -235,23 +235,26 @@ export default function Home() {
                         className="hidden"
                       />
                       {imagePreview && imagePreview.trim() !== '' ? (
-                        <div className="relative w-full h-full p-3">
+                        <div className="relative w-full h-full p-4">
                           <Image
                             src={imagePreview}
                             alt="Preview"
                             fill
-                            className="object-contain rounded-xl"
+                            className="object-contain rounded-2xl"
                           />
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-xl" />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-2xl" />
                         </div>
                       ) : (
-                        <div className="flex flex-col items-center gap-4 p-6">
-                          <div className="w-16 h-16 bg-gradient-to-br from-slate-200 to-slate-300 rounded-2xl flex items-center justify-center group-hover:from-blue-100 group-hover:to-purple-100 transition-all duration-300">
-                            <svg className="w-8 h-8 text-slate-600 group-hover:text-[#1C2575] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="flex flex-col items-center gap-6 p-8">
+                          <div className="w-24 h-24 bg-gradient-to-br from-[#1C2575] to-[#2a3699] rounded-3xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-xl">
+                            <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                           </div>
-                          <span className="text-sm font-medium text-slate-600 group-hover:text-[#1C2575] transition-colors">افزودن عکس</span>
+                          <div className="text-center space-y-2">
+                            <span className="block text-lg font-bold text-[#1C2575] group-hover:text-[#2a3699] transition-colors">افزودن عکس محصول</span>
+                            <span className="block text-sm text-slate-600">برای نتیجه بهتر عکس محصول را آپلود کنید</span>
+                          </div>
                         </div>
                       )}
                     </label>
@@ -259,33 +262,33 @@ export default function Home() {
                       <button
                         type="button"
                         onClick={handleRemoveImage}
-                        className="absolute -top-3 -right-3 w-10 h-10 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 z-10"
+                        className="absolute -top-4 -right-4 w-12 h-12 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center shadow-xl transition-all duration-300 hover:scale-110 z-10"
                       >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
                       </button>
                     )}
                   </div>
+                </div>
 
-                  <div className="flex items-center">
-                    <div className="px-6 py-3 bg-gradient-to-r from-slate-100 to-slate-50 rounded-full">
-                      <span className="text-lg font-medium text-slate-500">یا</span>
-                    </div>
+                <div className="flex items-center justify-center">
+                  <div className="px-6 py-2 bg-slate-100 rounded-full">
+                    <span className="text-sm font-medium text-slate-500">یا</span>
                   </div>
+                </div>
 
-                  <div className="w-full lg:flex-1 lg:max-w-md space-y-4 p-8 bg-gradient-to-br from-slate-50 to-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
-                    <label className="block text-base font-semibold text-slate-800">
-                      عنوان محصول
-                    </label>
-                    <input
-                      type="text"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      placeholder="مثلا: گوشی موبایل سامسونگ گلکسی"
-                      className="w-full px-5 py-4 bg-white border-2 border-slate-200 rounded-xl text-sm text-right placeholder:text-slate-400 focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300"
-                    />
-                  </div>
+                <div className="max-w-lg mx-auto">
+                  <label className="block text-sm font-medium text-slate-700 mb-2 text-center">
+                    عنوان محصول
+                  </label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="مثلا: گوشی موبایل سامسونگ گلکسی"
+                    className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right placeholder:text-slate-400 focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300"
+                  />
                 </div>
               </div>
 
