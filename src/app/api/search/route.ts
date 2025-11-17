@@ -12,6 +12,8 @@ export async function POST(request: NextRequest) {
 
     const formData = await request.formData();
 
+    console.log('Searching PGP with image_id:', formData.get('image_id'));
+
     const response = await fetch('https://pgp-search.basalam.com/v1/search/multimodal', {
       method: 'POST',
       headers: {

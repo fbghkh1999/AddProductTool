@@ -82,12 +82,33 @@ export default function Home() {
         return;
       }
 
+      let imageId = '0';
+
+      if (image) {
+        console.log('Uploading image to uploadio first...');
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', image);
+
+        const uploadResponse = await fetch('/api/upload-search-image', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+          body: uploadFormData,
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error('خطا در آپلود تصویر');
+        }
+
+        const uploadData = await uploadResponse.json();
+        imageId = uploadData.id || '0';
+        console.log('Image uploaded to uploadio, ID:', imageId);
+      }
+
       const formData = new FormData();
       formData.append('title', title);
-      if (image) {
-        formData.append('image_file', image);
-      }
-      formData.append('image_id', '0');
+      formData.append('image_id', imageId);
       formData.append('image_reference_id', '0');
       formData.append('product_id', '0');
       formData.append('size', '6');
