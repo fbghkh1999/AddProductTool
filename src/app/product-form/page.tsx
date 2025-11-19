@@ -31,10 +31,9 @@ function ProductFormContent() {
   const [formData, setFormData] = useState({
     category_id: '',
     preparation_days: '1',
-    package_weight: '',
+    weight: '',
     primary_price: '10000',
     stock: '1',
-    weight: '',
   });
 
   const [productData, setProductData] = useState<any>(null);
@@ -57,20 +56,34 @@ function ProductFormContent() {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      if (!productData?.name) return;
+      if (!productData?.name) {
+        console.log('Product name is empty, skipping category detection');
+        return;
+      }
 
+      console.log('Fetching categories for product name:', productData.name);
       setLoadingCategories(true);
       try {
         const response = await fetch(`/api/detect-category?title=${encodeURIComponent(productData.name)}`);
+        console.log('Category detection response status:', response.status);
+
         if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Category detection failed:', errorText);
           throw new Error('خطا در دریافت دسته‌بندی‌ها');
         }
+
         const data = await response.json();
-        if (data.status === 'OK' && data.result) {
+        console.log('Category detection data:', data);
+
+        if (data.status === 'OK' && data.result && Array.isArray(data.result)) {
+          console.log('Found categories:', data.result.length);
           setCategories(data.result);
           if (data.result.length > 0) {
             setFormData(prev => ({ ...prev, category_id: data.result[0].cat_id.toString() }));
           }
+        } else {
+          console.log('No categories found in response or unexpected format');
         }
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -86,14 +99,6 @@ function ProductFormContent() {
     e.preventDefault();
 
     if (!productData) return;
-
-    const packageWeight = parseInt(formData.package_weight);
-    const productWeight = formData.weight ? parseFloat(formData.weight) : 0;
-
-    if (productWeight > 0 && packageWeight <= productWeight) {
-      alert('وزن بسته‌بندی باید بیشتر از وزن محصول باشد!');
-      return;
-    }
 
     if (parseInt(formData.primary_price) < 10000) {
       alert('قیمت نمیتواند کمتر از 10000 تومان باشد.');
@@ -171,10 +176,10 @@ function ProductFormContent() {
         description: productData.description || '',
         category_id: parseInt(formData.category_id),
         preparation_days: parseInt(formData.preparation_days),
-        package_weight: parseInt(formData.package_weight),
+        package_weight: parseInt(formData.weight),
+        weight: parseInt(formData.weight),
         primary_price: formData.primary_price ? parseInt(formData.primary_price) : null,
         stock: formData.stock ? parseInt(formData.stock) : null,
-        weight: formData.weight ? parseFloat(formData.weight) : null,
         vendor_id: parseInt(vendorId),
       };
 
@@ -206,7 +211,10 @@ function ProductFormContent() {
           }
         }
 
-        throw new Error('خطا در ایجاد محصول');
+        const errorMessage = errorData.error || 'خطا در ایجاد محصول';
+        alert(errorMessage);
+        setSubmitting(false);
+        return;
       }
 
       const result = await createResponse.json();
@@ -271,7 +279,7 @@ function ProductFormContent() {
       <div className="flex flex-col items-start gap-5 max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="w-full">
           <button
-            onClick={() => router.push('/')}
+            onClick={() => router.back()}
             className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-slate-200 rounded-xl hover:border-[#1C2575] hover:bg-slate-50 transition-all duration-300"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -284,8 +292,14 @@ function ProductFormContent() {
         <div className="bg-white rounded-3xl shadow-2xl shadow-slate-200/50 overflow-hidden p-6 sm:p-8 w-full">
           <h1 className="text-xl sm:text-2xl font-bold text-slate-800 mb-6">تکمیل اطلاعات محصول</h1>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 p-6 rounded-2xl border-2 border-slate-200">
+              <h2 className="text-base font-bold text-[#1C2575] mb-4 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+                مشخصات اصلی محصول
+              </h2>
               <label className="block text-sm font-bold text-slate-800 mb-2">
                 نام محصول <span className="text-red-500">*</span>
               </label>
@@ -312,7 +326,13 @@ function ProductFormContent() {
               )}
             </div>
 
-            <div className="col-span-2">
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 p-6 rounded-2xl border-2 border-slate-200">
+              <h2 className="text-base font-bold text-[#1C2575] mb-4 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                </svg>
+                دسته‌بندی محصول
+              </h2>
               <label className="block text-sm font-bold text-slate-800 mb-2">
                 دسته‌بندی <span className="text-red-500">*</span>
               </label>
@@ -367,36 +387,30 @@ function ProductFormContent() {
               )}
             </div>
 
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 p-6 rounded-2xl border-2 border-slate-200">
+              <h2 className="text-base font-bold text-[#1C2575] mb-4 flex items-center gap-2">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                اطلاعات تکمیلی محصول
+              </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
 
               <div>
                 <label className="block text-sm font-bold text-slate-800 mb-2">
-                  وزن محصول (گرم) <span className="text-red-500">*</span>
+                  وزن با بسته‌بندی (گرم) <span className="text-red-500">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   required
-                  min="1"
-                  value={formData.weight}
-                  onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
-                  placeholder="وزن محصول"
+                  value={formData.weight ? parseInt(formData.weight).toLocaleString('en-US') : ''}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^\d]/g, '');
+                    setFormData({ ...formData, weight: value });
+                  }}
+                  placeholder="1,000"
                   className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
                 />
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-slate-800 mb-2">
-                  وزن بسته‌بندی (گرم) <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="number"
-                  required
-                  value={formData.package_weight}
-                  onChange={(e) => setFormData({ ...formData, package_weight: e.target.value })}
-                  placeholder="وزن به گرم"
-                  className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
-                />
-                <p className="text-xs text-slate-500 mt-1">وزن بسته‌بندی باید بیشتر از وزن محصول باشد</p>
               </div>
 
               <div>
@@ -418,12 +432,14 @@ function ProductFormContent() {
                   قیمت (تومان) <span className="text-red-500">*</span>
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   required
-                  min="10000"
-                  value={formData.primary_price}
-                  onChange={(e) => setFormData({ ...formData, primary_price: e.target.value })}
-                  placeholder="حداقل 10000 تومان"
+                  value={formData.primary_price ? parseInt(formData.primary_price).toLocaleString('en-US') : ''}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^\d]/g, '');
+                    setFormData({ ...formData, primary_price: value });
+                  }}
+                  placeholder="10,000"
                   className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
                 />
                 <p className="text-xs text-slate-500 mt-1">حداقل قیمت: 10,000 تومان</p>
@@ -444,8 +460,9 @@ function ProductFormContent() {
                 />
               </div>
             </div>
+            </div>
 
-            <div className="pt-6 border-t border-slate-200">
+            <div className="pt-2">
               <button
                 type="submit"
                 disabled={submitting}

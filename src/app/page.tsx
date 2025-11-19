@@ -29,6 +29,24 @@ export default function Home() {
       console.log('✅ Authenticated - showing main page');
       setCheckingAuth(false);
     }
+
+    const savedTitle = sessionStorage.getItem('search_title');
+    const savedImage = sessionStorage.getItem('search_image');
+
+    if (savedTitle) {
+      setTitle(savedTitle);
+    }
+    if (savedImage) {
+      setImagePreview(savedImage);
+
+      fetch(savedImage)
+        .then(res => res.blob())
+        .then(blob => {
+          const file = new File([blob], 'restored-image.jpg', { type: 'image/jpeg' });
+          setImage(file);
+        })
+        .catch(err => console.error('Error restoring image file:', err));
+    }
   }, [router]);
 
   const handleLogout = () => {
@@ -67,7 +85,7 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!title && !image) {
+    if (!title && !image && !imagePreview) {
       alert('لطفا حداقل عنوان یا تصویر را وارد کنید');
       return;
     }
@@ -84,10 +102,19 @@ export default function Home() {
 
       let imageId = '0';
 
-      if (image) {
+      if (image || imagePreview) {
         console.log('Uploading image to uploadio first...');
+
+        let fileToUpload = image;
+
+        if (!image && imagePreview) {
+          const response = await fetch(imagePreview);
+          const blob = await response.blob();
+          fileToUpload = new File([blob], 'search-image.jpg', { type: 'image/jpeg' });
+        }
+
         const uploadFormData = new FormData();
-        uploadFormData.append('file', image);
+        uploadFormData.append('file', fileToUpload!);
 
         const uploadResponse = await fetch('/api/upload-search-image', {
           method: 'POST',
@@ -130,6 +157,13 @@ export default function Home() {
 
       const data = await response.json();
       console.log('API Response:', data);
+
+      sessionStorage.setItem('search_title', title);
+      if (imagePreview) {
+        sessionStorage.setItem('search_image', imagePreview);
+      } else {
+        sessionStorage.removeItem('search_image');
+      }
 
       const encodedData = encodeURIComponent(JSON.stringify(data));
       router.push(`/results?data=${encodedData}`);
