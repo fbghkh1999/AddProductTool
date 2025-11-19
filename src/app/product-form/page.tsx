@@ -32,6 +32,7 @@ function ProductFormContent() {
     category_id: '',
     preparation_days: '1',
     weight: '',
+    package_weight: '',
     primary_price: '10000',
     stock: '1',
   });
@@ -176,9 +177,9 @@ function ProductFormContent() {
         description: productData.description || '',
         category_id: parseInt(formData.category_id),
         preparation_days: parseInt(formData.preparation_days),
-        package_weight: parseInt(formData.weight),
+        package_weight: parseInt(formData.package_weight),
         weight: parseInt(formData.weight),
-        primary_price: formData.primary_price ? parseInt(formData.primary_price) : null,
+        primary_price: formData.primary_price ? parseInt(formData.primary_price) * 10 : null,
         stock: formData.stock ? parseInt(formData.stock) : null,
         vendor_id: parseInt(vendorId),
       };
@@ -398,7 +399,7 @@ function ProductFormContent() {
 
               <div>
                 <label className="block text-sm font-bold text-slate-800 mb-2">
-                  وزن با بسته‌بندی (گرم) <span className="text-red-500">*</span>
+                  وزن (گرم) <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -407,6 +408,23 @@ function ProductFormContent() {
                   onChange={(e) => {
                     const value = e.target.value.replace(/[^\d]/g, '');
                     setFormData({ ...formData, weight: value });
+                  }}
+                  placeholder="1,000"
+                  className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-slate-800 mb-2">
+                  وزن با بسته‌بندی (گرم) <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={formData.package_weight ? parseInt(formData.package_weight).toLocaleString('en-US') : ''}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^\d]/g, '');
+                    setFormData({ ...formData, package_weight: value });
                   }}
                   placeholder="1,000"
                   className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
