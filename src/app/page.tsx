@@ -31,22 +31,13 @@ export default function Home() {
     }
 
     const savedTitle = sessionStorage.getItem('search_title');
-    const savedImage = sessionStorage.getItem('search_image');
 
     if (savedTitle) {
       setTitle(savedTitle);
     }
-    if (savedImage) {
-      setImagePreview(savedImage);
 
-      fetch(savedImage)
-        .then(res => res.blob())
-        .then(blob => {
-          const file = new File([blob], 'restored-image.jpg', { type: 'image/jpeg' });
-          setImage(file);
-        })
-        .catch(err => console.error('Error restoring image file:', err));
-    }
+    // Clear any saved image on reload
+    sessionStorage.removeItem('search_image');
   }, [router]);
 
   const handleLogout = () => {
@@ -159,11 +150,6 @@ export default function Home() {
       console.log('API Response:', data);
 
       sessionStorage.setItem('search_title', title);
-      if (imagePreview) {
-        sessionStorage.setItem('search_image', imagePreview);
-      } else {
-        sessionStorage.removeItem('search_image');
-      }
 
       const encodedData = encodeURIComponent(JSON.stringify(data));
       router.push(`/results?data=${encodedData}`);
@@ -233,6 +219,52 @@ export default function Home() {
       )}
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
+        {/* Progress Flow Indicator */}
+        <div className="w-full bg-white rounded-2xl shadow-sm p-6 mb-8">
+          <div className="flex items-center justify-between">
+            {/* Step 1 - جستجو (Current) */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#1C2575] flex items-center justify-center">
+                <span className="text-white font-bold text-sm">1</span>
+              </div>
+              <span className="text-sm font-semibold text-[#1C2575]">جستجو</span>
+            </div>
+
+            {/* Line */}
+            <div className="flex-1 h-0.5 bg-[#E5E5EA] mx-2"></div>
+
+            {/* Step 2 - انتخاب محصول */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#E5E5EA] flex items-center justify-center">
+                <span className="text-[#8E8E93] font-bold text-sm">2</span>
+              </div>
+              <span className="text-sm font-semibold text-[#8E8E93]">انتخاب محصول</span>
+            </div>
+
+            {/* Line */}
+            <div className="flex-1 h-0.5 bg-[#E5E5EA] mx-2"></div>
+
+            {/* Step 3 - تکمیل اطلاعات */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#E5E5EA] flex items-center justify-center">
+                <span className="text-[#8E8E93] font-bold text-sm">3</span>
+              </div>
+              <span className="text-sm font-semibold text-[#8E8E93]">تکمیل اطلاعات</span>
+            </div>
+
+            {/* Line */}
+            <div className="flex-1 h-0.5 bg-[#E5E5EA] mx-2"></div>
+
+            {/* Step 4 - اتمام */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#E5E5EA] flex items-center justify-center">
+                <span className="text-[#8E8E93] font-bold text-sm">4</span>
+              </div>
+              <span className="text-sm font-semibold text-[#8E8E93]">اتمام</span>
+            </div>
+          </div>
+        </div>
+
         <div className="bg-white rounded-3xl shadow-2xl shadow-slate-200/50 overflow-hidden">
           <div className="px-6 sm:px-12 lg:px-16 py-12 sm:py-16 lg:py-20">
             <form onSubmit={handleSubmit} className="space-y-12">
@@ -253,7 +285,7 @@ export default function Home() {
                     افزودن محصول با دستیار هوشمند
                   </h1>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    دستیار هوش مصنوعی با بررسی نام یا عکس محصولی که وارد کردی بهت کمک میکنه محصولت رو سریع تر بسازی و به باسلام اد کنی
+                    دستیار هوش مصنوعی با بررسی نام یا عکس محصولی که وارد کردی بهت کمک میکنه محصولت رو سریع تر بسازی
                   </p>
                 </div>
               </div>

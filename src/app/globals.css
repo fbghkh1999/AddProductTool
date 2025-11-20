@@ -1,8 +1,36 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Dana';
+  src: url('https://cdn.jsdelivr.net/gh/rastikerdar/dana-font@v1.1/dist/Dana-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Dana';
+  src: url('https://cdn.jsdelivr.net/gh/rastikerdar/dana-font@v1.1/dist/Dana-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Dana';
+  src: url('https://cdn.jsdelivr.net/gh/rastikerdar/dana-font@v1.1/dist/Dana-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+* {
+  font-family: 'Dana', -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 @theme inline {

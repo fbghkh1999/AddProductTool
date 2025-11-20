@@ -268,8 +268,8 @@ function ProductFormContent() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-slate-200 border-t-[#1C2575] rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-lg text-slate-600">در حال بارگذاری...</p>
+          <div className="w-12 h-12 border-4 border-slate-200 border-t-[#1C2575] rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-sm text-slate-600">در حال بارگذاری...</p>
         </div>
       </div>
     );
@@ -277,70 +277,98 @@ function ProductFormContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
-      <div className="flex flex-col items-start gap-5 max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div className="w-full">
-          <button
-            onClick={() => router.back()}
-            className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-slate-200 rounded-xl hover:border-[#1C2575] hover:bg-slate-50 transition-all duration-300"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            <span className="font-medium">بازگشت</span>
-          </button>
-        </div>
-
-        <div className="bg-white rounded-3xl shadow-2xl shadow-slate-200/50 overflow-hidden p-6 sm:p-8 w-full">
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-800 mb-6">تکمیل اطلاعات محصول</h1>
-
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100 p-6 rounded-2xl border-2 border-slate-200">
-              <h2 className="text-base font-bold text-[#1C2575] mb-4 flex items-center gap-2">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+      <div className="flex flex-col items-start gap-6 max-w-3xl mx-auto py-12 px-4">
+        {/* Progress Flow Indicator */}
+        <div className="w-full bg-white rounded-2xl shadow-sm p-6">
+          <div className="flex items-center justify-between">
+            {/* Step 1 - جستجو */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#1C2575] flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                مشخصات اصلی محصول
-              </h2>
-              <label className="block text-sm font-bold text-slate-800 mb-2">
-                نام محصول <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                required
-                value={productName}
-                onChange={(e) => {
-                  setProductName(e.target.value);
-                  setNameError('');
-                }}
-                placeholder="نام محصول"
-                className={`w-full px-4 py-3 bg-white border-2 ${
-                  nameError ? 'border-red-500' : 'border-slate-200'
-                } rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all`}
-              />
-              {nameError && (
-                <p className="text-xs text-red-600 mt-2 flex items-center gap-1">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  {nameError}
-                </p>
-              )}
+              </div>
+              <span className="text-sm font-semibold text-[#1C2575]">جستجو</span>
             </div>
 
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100 p-6 rounded-2xl border-2 border-slate-200">
-              <h2 className="text-base font-bold text-[#1C2575] mb-4 flex items-center gap-2">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+            {/* Line */}
+            <div className="flex-1 h-0.5 bg-[#1C2575] mx-2"></div>
+
+            {/* Step 2 - انتخاب محصول */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#1C2575] flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                دسته‌بندی محصول
-              </h2>
-              <label className="block text-sm font-bold text-slate-800 mb-2">
-                دسته‌بندی <span className="text-red-500">*</span>
-              </label>
+              </div>
+              <span className="text-sm font-semibold text-[#1C2575]">انتخاب محصول</span>
+            </div>
+
+            {/* Line */}
+            <div className="flex-1 h-0.5 bg-[#1C2575] mx-2"></div>
+
+            {/* Step 3 - تکمیل اطلاعات (Current) */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#1C2575] flex items-center justify-center">
+                <span className="text-white font-bold text-sm">3</span>
+              </div>
+              <span className="text-sm font-semibold text-[#1C2575]">تکمیل اطلاعات</span>
+            </div>
+
+            {/* Line */}
+            <div className="flex-1 h-0.5 bg-[#E5E5EA] mx-2"></div>
+
+            {/* Step 4 - اتمام */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#E5E5EA] flex items-center justify-center">
+                <span className="text-[#8E8E93] font-bold text-sm">4</span>
+              </div>
+              <span className="text-sm font-semibold text-[#8E8E93]">اتمام</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full bg-white rounded-3xl shadow-sm p-8 sm:p-10">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#3D3D4E] mb-8 text-right">تکمیل اطلاعات محصول</h1>
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            {/* نام محصول Section */}
+            <div className="flex flex-col gap-5 p-6 bg-[#F5F5F7] rounded-2xl border border-[#E5E5EA]">
+              <div>
+                <label className="block text-sm font-semibold text-[#3D3D4E] mb-3 text-right">
+                  نام محصول <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={productName}
+                  onChange={(e) => {
+                    setProductName(e.target.value);
+                    setNameError('');
+                  }}
+                  placeholder="نام محصول"
+                  className={`w-full px-4 py-3 bg-white border ${
+                    nameError ? 'border-red-500' : 'border-[#E5E5EA]'
+                  } rounded-xl text-sm text-right focus:border-[#1C2575] focus:outline-none transition-all`}
+                />
+                {nameError && (
+                  <p className="text-xs text-red-600 mt-2 flex items-center gap-1 justify-end">
+                    <span>{nameError}</span>
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* دسته‌بندی Section */}
+            <div className="flex flex-col gap-5 p-6 bg-[#F5F5F7] rounded-2xl border border-[#E5E5EA]">
+              <div>
+                <label className="block text-sm font-semibold text-[#3D3D4E] mb-3 text-right">
+                  دسته‌بندی <span className="text-red-500">*</span>
+                </label>
               {loadingCategories ? (
-                <div className="flex items-center gap-2 p-4 bg-slate-50 rounded-xl">
-                  <div className="w-5 h-5 border-2 border-slate-300 border-t-[#1C2575] rounded-full animate-spin"></div>
-                  <span className="text-sm text-slate-600">در حال تشخیص دسته‌بندی...</span>
+                <div className="flex items-center gap-3 p-4 bg-[#F5F5F7] rounded-xl justify-end">
+                  <span className="text-sm text-[#3D3D4E]">در حال تشخیص دسته‌بندی...</span>
+                  <div className="w-5 h-5 border-2 border-[#E5E5EA] border-t-[#1C2575] rounded-full animate-spin"></div>
                 </div>
               ) : categories.length > 0 ? (
                 <div className="flex flex-col gap-3">
@@ -361,15 +389,15 @@ function ProductFormContent() {
                         type="button"
                         onClick={() => setFormData({ ...formData, category_id: cat.cat_id.toString() })}
                         className={`
-                          p-4 rounded-xl border-2 text-right transition-all duration-300 w-full
+                          p-4 rounded-xl border text-right transition-all w-full
                           ${formData.category_id === cat.cat_id.toString()
-                            ? 'bg-[#1C2575] border-[#1C2575] text-white shadow-lg'
-                            : 'bg-white border-slate-200 text-slate-700 hover:border-[#1C2575] hover:bg-blue-50'
+                            ? 'bg-[#1C2575] border-[#1C2575] text-white'
+                            : 'bg-white border-[#E5E5EA] text-[#3D3D4E] hover:border-[#1C2575]'
                           }
                         `}
                       >
-                        <div className="font-bold text-sm mb-1">{cat.cat_title}</div>
-                        <div className={`text-xs ${formData.category_id === cat.cat_id.toString() ? 'text-blue-100' : 'text-slate-500'}`}>
+                        <div className="font-semibold text-sm mb-1">{cat.cat_title}</div>
+                        <div className={`text-xs ${formData.category_id === cat.cat_id.toString() ? 'text-white/70' : 'text-[#8E8E93]'}`}>
                           {getCategoryPath(cat)}
                         </div>
                       </button>
@@ -383,22 +411,17 @@ function ProductFormContent() {
                   value={formData.category_id}
                   onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
                   placeholder="شناسه دسته‌بندی"
-                  className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white border border-[#E5E5EA] rounded-xl text-sm text-right focus:border-[#1C2575] focus:outline-none transition-all"
                 />
               )}
+              </div>
             </div>
 
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100 p-6 rounded-2xl border-2 border-slate-200">
-              <h2 className="text-base font-bold text-[#1C2575] mb-4 flex items-center gap-2">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-                اطلاعات تکمیلی محصول
-              </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-
+            {/* سایر اطلاعات Section */}
+            <div className="flex flex-col gap-5 p-6 bg-[#F5F5F7] rounded-2xl border border-[#E5E5EA]">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-bold text-slate-800 mb-2">
+                <label className="block text-sm font-semibold text-[#3D3D4E] mb-3 text-right">
                   وزن (گرم) <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -410,12 +433,12 @@ function ProductFormContent() {
                     setFormData({ ...formData, weight: value });
                   }}
                   placeholder="1,000"
-                  className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white border border-[#E5E5EA] rounded-xl text-sm text-right focus:border-[#1C2575] focus:outline-none transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-800 mb-2">
+                <label className="block text-sm font-semibold text-[#3D3D4E] mb-3 text-right">
                   وزن با بسته‌بندی (گرم) <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -427,12 +450,12 @@ function ProductFormContent() {
                     setFormData({ ...formData, package_weight: value });
                   }}
                   placeholder="1,000"
-                  className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white border border-[#E5E5EA] rounded-xl text-sm text-right focus:border-[#1C2575] focus:outline-none transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-800 mb-2">
+                <label className="block text-sm font-semibold text-[#3D3D4E] mb-3 text-right">
                   مدت آماده‌سازی (روز) <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -440,13 +463,13 @@ function ProductFormContent() {
                   required
                   value={formData.preparation_days}
                   onChange={(e) => setFormData({ ...formData, preparation_days: e.target.value })}
-                  placeholder="تعداد روز"
-                  className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
+                  placeholder="1"
+                  className="w-full px-4 py-3 bg-white border border-[#E5E5EA] rounded-xl text-sm text-right focus:border-[#1C2575] focus:outline-none transition-all"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-800 mb-2">
+                <label className="block text-sm font-semibold text-[#3D3D4E] mb-3 text-right">
                   قیمت (تومان) <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -458,13 +481,13 @@ function ProductFormContent() {
                     setFormData({ ...formData, primary_price: value });
                   }}
                   placeholder="10,000"
-                  className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
+                  className="w-full px-4 py-3 bg-white border border-[#E5E5EA] rounded-xl text-sm text-right focus:border-[#1C2575] focus:outline-none transition-all"
                 />
-                <p className="text-xs text-slate-500 mt-1">حداقل قیمت: 10,000 تومان</p>
+                <p className="text-xs text-[#8E8E93] mt-2 text-right">حداقل قیمت: 10,000 تومان</p>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-800 mb-2">
+                <label className="block text-sm font-semibold text-[#3D3D4E] mb-3 text-right">
                   موجودی <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -473,18 +496,26 @@ function ProductFormContent() {
                   min="0"
                   value={formData.stock}
                   onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                  placeholder="تعداد موجودی"
-                  className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all"
+                  placeholder="1"
+                  className="w-full px-4 py-3 bg-white border border-[#E5E5EA] rounded-xl text-sm text-right focus:border-[#1C2575] focus:outline-none transition-all"
                 />
               </div>
-            </div>
+              </div>
             </div>
 
-            <div className="pt-2">
+            {/* Buttons */}
+            <div className="flex gap-4 pt-2">
+              <button
+                type="button"
+                onClick={() => router.back()}
+                className="px-8 py-4 bg-white text-[#3D3D4E] border border-[#E5E5EA] rounded-xl hover:bg-[#F5F5F7] transition-all text-sm font-semibold"
+              >
+                بازگشت
+              </button>
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full px-8 py-5 bg-gradient-to-r from-[#1C2575] to-[#2a3699] text-white text-base font-bold rounded-xl hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                className="flex-1 px-8 py-4 bg-[#1C2575] text-white text-base font-semibold rounded-xl hover:bg-[#151d5f] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {submitting ? (
                   <>
@@ -495,7 +526,7 @@ function ProductFormContent() {
                     <span>در حال ایجاد محصول...</span>
                   </>
                 ) : (
-                  <span>ایجاد محصول</span>
+                  <span>ادامه</span>
                 )}
               </button>
             </div>
@@ -511,8 +542,8 @@ export default function ProductFormPage() {
     <Suspense fallback={
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-slate-200 border-t-[#1C2575] rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-lg text-slate-600">در حال بارگذاری...</p>
+          <div className="w-12 h-12 border-4 border-slate-200 border-t-[#1C2575] rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-sm text-slate-600">در حال بارگذاری...</p>
         </div>
       </div>
     }>
