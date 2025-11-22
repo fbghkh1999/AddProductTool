@@ -1,9 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { isAuthenticated, clearTokens, getAccessToken } from '@/utils/auth';
+
+interface AutocompleteItem {
+  key: string;
+  value: string;
+}
+
+interface AutocompleteResponse {
+  suggestions: AutocompleteItem[];
+}
 
 export default function Home() {
   const router = useRouter();
@@ -12,6 +21,10 @@ export default function Home() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [autocompleteSuggestions, setAutocompleteSuggestions] = useState<AutocompleteItem[]>([]);
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const [autocompleteLoading, setAutocompleteLoading] = useState(false);
+  const autocompleteRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     console.log('🔍 Checking authentication on main page');
@@ -40,21 +53,75 @@ export default function Home() {
     sessionStorage.removeItem('search_image');
   }, [router]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (title && title.trim().length >= 2) {
+        fetchAutocomplete(title);
+      } else {
+        setAutocompleteSuggestions([]);
+        setShowAutocomplete(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [title]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (autocompleteRef.current && !autocompleteRef.current.contains(event.target as Node)) {
+        setShowAutocomplete(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const fetchAutocomplete = async (query: string) => {
+    if (!query || query.trim().length < 2) {
+      setAutocompleteSuggestions([]);
+      setShowAutocomplete(false);
+      return;
+    }
+
+    const token = getAccessToken();
+    if (!token) {
+      return;
+    }
+
+    setAutocompleteLoading(true);
+    try {
+      const response = await fetch(
+        `/api/autocomplete?q=${encodeURIComponent(query)}&limit=10`,
+        {
+          headers: {
+            'accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data: AutocompleteResponse = await response.json();
+        const suggestions = data.suggestions || [];
+        setAutocompleteSuggestions(suggestions);
+        setShowAutocomplete(suggestions.length > 0);
+      }
+    } catch (error) {
+      console.error('Autocomplete error:', error);
+      setAutocompleteSuggestions([]);
+      setShowAutocomplete(false);
+    } finally {
+      setAutocompleteLoading(false);
+    }
+  };
+
   const handleLogout = () => {
     clearTokens();
     router.push('/login');
   };
-
-  if (checkingAuth) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-slate-200 border-t-[#1C2575] rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-lg text-slate-600">در حال بارگذاری...</p>
-        </div>
-      </div>
-    );
-  }
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -71,6 +138,22 @@ export default function Home() {
   const handleRemoveImage = () => {
     setImage(null);
     setImagePreview(null);
+  };
+
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-slate-200 border-t-[#1C2575] rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-lg text-slate-600">در حال بارگذاری...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const handleSelectSuggestion = (suggestion: AutocompleteItem) => {
+    setTitle(suggestion.value);
+    setShowAutocomplete(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -344,17 +427,47 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="max-w-lg mx-auto">
+                <div className="max-w-lg mx-auto relative" ref={autocompleteRef}>
                   <label className="block text-sm font-medium text-slate-700 mb-2 text-center">
                     عنوان محصول
                   </label>
-                  <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="مثلا: گوشی موبایل سامسونگ گلکسی"
-                    className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right placeholder:text-slate-400 focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300"
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      onFocus={() => {
+                        if (autocompleteSuggestions.length > 0) {
+                          setShowAutocomplete(true);
+                        }
+                      }}
+                      placeholder="مثلا: گوشی موبایل سامسونگ گلکسی"
+                      className="w-full px-4 py-3 bg-white border-2 border-slate-200 rounded-xl text-sm text-right placeholder:text-slate-400 focus:border-[#1C2575] focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300"
+                    />
+                    {autocompleteLoading && (
+                      <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                        <svg className="animate-spin w-5 h-5 text-[#1C2575]" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+
+                  {showAutocomplete && autocompleteSuggestions.length > 0 && (
+                    <div className="absolute z-50 w-full mt-2 bg-white border-2 border-slate-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                      {autocompleteSuggestions.map((suggestion, index) => (
+                        <button
+                          key={`${suggestion.key}-${index}`}
+                          type="button"
+                          onClick={() => handleSelectSuggestion(suggestion)}
+                          className="w-full px-4 py-3 text-right text-sm text-slate-700 hover:bg-[#F5F5F7] hover:text-[#1C2575] transition-colors border-b border-slate-100 last:border-b-0"
+                        >
+                          {suggestion.value}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
 
