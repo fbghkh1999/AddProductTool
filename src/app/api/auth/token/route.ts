@@ -12,8 +12,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const CLIENT_ID = '1605';
-    const CLIENT_SECRET = 'xTx0NcsX1Td59HxbTGf6PReQJ9yWOD1uJnIM8HzD';
+    const CLIENT_ID = '1594';
+    const CLIENT_SECRET = 'J7LrFWdSoaUSOIVbtTZhtuaO8qsPvUh3Fv6HHho6';
     const REDIRECT_URI = `${request.headers.get('origin')}/auth/callback`;
 
     console.log('Token exchange request:', {

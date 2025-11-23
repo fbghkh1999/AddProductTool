@@ -14,7 +14,7 @@ export default function LoginPage() {
   }, [router]);
 
   const handleLogin = () => {
-    const CLIENT_ID = '1605';
+    const CLIENT_ID = '1594';
     const REDIRECT_URI = encodeURIComponent(window.location.origin + '/auth/callback');
     const SCOPES = 'vendor.profile.read+vendor.product.write+customer.profile.read';
     const STATE = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
