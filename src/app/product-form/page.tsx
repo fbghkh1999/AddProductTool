@@ -507,7 +507,7 @@ function ProductFormContent() {
             <div className="flex gap-4 pt-2">
               <button
                 type="button"
-                onClick={() => router.back()}
+                onClick={() => window.history.back()}
                 className="px-8 py-4 bg-white text-[#3D3D4E] border border-[#E5E5EA] rounded-xl hover:bg-[#F5F5F7] transition-all text-sm font-semibold"
               >
                 بازگشت

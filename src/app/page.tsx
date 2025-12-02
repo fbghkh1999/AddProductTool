@@ -364,19 +364,18 @@ export default function Home() {
                 </div>
 
                 <div className="space-y-4 max-w-2xl mx-auto">
-                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-800 leading-tight">
+                  <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-800 leading-tight">
                     افزودن محصول با دستیار هوشمند
                   </h1>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    دستیار هوش مصنوعی با بررسی نام یا عکس محصولی که وارد کردی بهت کمک میکنه محصولت رو سریع تر بسازی
-                  </p>
-                </div>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                      دستیار هوش مصنوعی با بررسی نام یا عکس محصولی که وارد کردی بهت کمک میکنه محصولت رو سریع تر بسازی
+                  </p>                </div>
               </div>
 
               <div className="space-y-8">
                 <div className="flex flex-col items-center justify-center">
                   <div className="relative">
-                    <label className="group relative flex flex-col items-center justify-center w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 border-4 border-dashed border-[#1C2575] rounded-3xl cursor-pointer hover:border-[#2a3699] hover:shadow-2xl hover:shadow-blue-900/30 transition-all duration-300 overflow-hidden">
+                    <label className="group relative flex flex-col items-center justify-center max-w-full max-h-64 w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 border-4 border-dashed border-[#1C2575] rounded-3xl cursor-pointer hover:border-[#2a3699] hover:shadow-2xl hover:shadow-blue-900/30 transition-all duration-300 overflow-hidden">
                       <input
                         type="file"
                         accept="image/*"
