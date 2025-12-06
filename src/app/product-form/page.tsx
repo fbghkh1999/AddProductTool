@@ -79,7 +79,7 @@ function ProductFormContent() {
 
         if (data.status === 'OK' && data.result && Array.isArray(data.result)) {
           console.log('Found categories:', data.result.length);
-          setCategories(data.result);
+          setCategories(data.result.slice(0, 3));
           if (data.result.length > 0) {
             setFormData(prev => ({ ...prev, category_id: data.result[0].cat_id.toString() }));
           }
@@ -507,7 +507,13 @@ function ProductFormContent() {
             <div className="flex gap-4 pt-2">
               <button
                 type="button"
-                onClick={() => window.history.back()}
+                onClick={() => {
+                  if (window.history.length > 1) {
+                    router.back();
+                  } else {
+                    router.push('/dashboard');
+                  }
+                }}
                 className="px-8 py-4 bg-white text-[#3D3D4E] border border-[#E5E5EA] rounded-xl hover:bg-[#F5F5F7] transition-all text-sm font-semibold"
               >
                 بازگشت
