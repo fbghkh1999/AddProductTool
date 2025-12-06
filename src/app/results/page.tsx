@@ -158,6 +158,7 @@ function ResultsContent() {
                         src={product.image_urls[0]}
                         alt={product.title}
                         fill
+                        unoptimized
                         className="object-contain p-3"
                       />
                     </div>

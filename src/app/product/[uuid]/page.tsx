@@ -168,6 +168,7 @@ export default function ProductDetailsPage() {
                   src={product.image_urls[0]}
                   alt={product.title}
                   fill
+                  unoptimized
                   className="object-contain p-4"
                 />
               </div>
