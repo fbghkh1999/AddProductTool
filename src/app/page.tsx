@@ -245,7 +245,7 @@ export default function Home() {
   };
 
   return (
-    <div className="h-screen overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 relative">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 relative">
       <div className="absolute top-4 left-4 z-10">
         <button
           onClick={handleLogout}
@@ -301,9 +301,9 @@ export default function Home() {
         </div>
       )}
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 h-full flex flex-col">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
         {/* Progress Flow Indicator */}
-        <div className="w-full bg-white rounded-2xl shadow-sm p-4 mb-4">
+        <div className="w-full bg-white rounded-2xl shadow-sm p-6 mb-8">
           <div className="flex items-center justify-between">
             {/* Step 1 - جستجو (Current) */}
             <div className="flex items-center gap-3">
@@ -348,35 +348,34 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-2xl shadow-slate-200/50 overflow-hidden flex-1 flex flex-col">
-          <div className="px-6 sm:px-8 lg:px-12 py-6 sm:py-8 lg:py-10 flex-1 flex flex-col justify-center">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="text-center space-y-4">
-                <div className="relative inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-[#1C2575] via-[#2a3699] to-[#3b47bd] rounded-2xl shadow-xl shadow-blue-900/20 transform hover:scale-105 transition-transform duration-300">
-                  <svg className="w-10 h-10 sm:w-12 sm:h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="bg-white rounded-3xl shadow-2xl shadow-slate-200/50 overflow-hidden">
+          <div className="px-6 sm:px-12 lg:px-16 py-12 sm:py-16 lg:py-20">
+            <form onSubmit={handleSubmit} className="space-y-12">
+              <div className="text-center space-y-8">
+                <div className="relative inline-flex items-center justify-center w-32 h-32 sm:w-40 sm:h-40 bg-gradient-to-br from-[#1C2575] via-[#2a3699] to-[#3b47bd] rounded-3xl shadow-xl shadow-blue-900/20 transform hover:scale-105 transition-transform duration-300">
+                  <svg className="w-16 h-16 sm:w-20 sm:h-20 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                   </svg>
-                  <div className="absolute -bottom-1 -right-1 w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#1C2575]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="absolute -bottom-2 -right-2 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+                    <svg className="w-6 h-6 sm:w-7 sm:h-7 text-[#1C2575]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" />
                     </svg>
                   </div>
                 </div>
 
                 <div className="space-y-4 max-w-2xl mx-auto">
-                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-800 leading-tight">
+                  <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-slate-800 leading-tight">
                     افزودن محصول با دستیار هوشمند
                   </h1>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                    دستیار هوش مصنوعی با بررسی نام یا عکس محصولی که وارد کردی بهت کمک میکنه محصولت رو سریع تر بسازی
-                  </p>
-                </div>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                      دستیار هوش مصنوعی با بررسی نام یا عکس محصولی که وارد کردی بهت کمک میکنه محصولت رو سریع تر بسازی
+                  </p>                </div>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-8">
                 <div className="flex flex-col items-center justify-center">
                   <div className="relative">
-                    <label className="group relative flex flex-col items-center justify-center w-48 h-48 sm:w-56 sm:h-56 lg:w-64 lg:h-64 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 border-4 border-dashed border-[#1C2575] rounded-3xl cursor-pointer hover:border-[#2a3699] hover:shadow-2xl hover:shadow-blue-900/30 transition-all duration-300 overflow-hidden">
+                    <label className="group relative flex flex-col items-center justify-center max-w-full max-h-64 w-64 h-64 sm:w-72 sm:h-72 lg:w-80 lg:h-80 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 border-4 border-dashed border-[#1C2575] rounded-3xl cursor-pointer hover:border-[#2a3699] hover:shadow-2xl hover:shadow-blue-900/30 transition-all duration-300 overflow-hidden">
                       <input
                         type="file"
                         accept="image/*"
@@ -394,9 +393,9 @@ export default function Home() {
                           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-2xl" />
                         </div>
                       ) : (
-                        <div className="flex flex-col items-center gap-3 p-4">
-                          <div className="w-16 h-16 bg-gradient-to-br from-[#1C2575] to-[#2a3699] rounded-2xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-xl">
-                            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="flex flex-col items-center gap-6 p-8">
+                          <div className="w-24 h-24 bg-gradient-to-br from-[#1C2575] to-[#2a3699] rounded-3xl flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-xl">
+                            <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                           </div>
@@ -471,11 +470,11 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-slate-200">
+              <div className="pt-8 border-t border-slate-200">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full sm:w-auto min-w-[280px] mx-auto flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-[#1C2575] via-[#2a3699] to-[#1C2575] bg-size-200 bg-pos-0 hover:bg-pos-100 text-white text-base font-bold rounded-xl shadow-lg shadow-blue-900/30 hover:shadow-xl hover:shadow-blue-900/40 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full sm:w-auto min-w-[280px] mx-auto flex items-center justify-center gap-3 px-8 py-5 bg-gradient-to-r from-[#1C2575] via-[#2a3699] to-[#1C2575] bg-size-200 bg-pos-0 hover:bg-pos-100 text-white text-base font-bold rounded-xl shadow-lg shadow-blue-900/30 hover:shadow-xl hover:shadow-blue-900/40 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <>
@@ -497,6 +496,12 @@ export default function Home() {
               </div>
             </form>
           </div>
+        </div>
+
+        <div className="mt-8 text-center">
+          <p className="text-sm text-slate-500">
+            با استفاده از هوش مصنوعی، محصولات خود را سریع‌تر اضافه کنید
+          </p>
         </div>
       </div>
     </div>
