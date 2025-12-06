@@ -48,10 +48,10 @@ function ProductFormContent() {
         setProductName(parsed.name);
       } catch (error) {
         console.error('Error parsing product data:', error);
-        router.push('/');
+        router.push('/dashboard');
       }
     } else {
-      router.push('/');
+      router.push('/dashboard');
     }
   }, [searchParams, router]);
 
@@ -254,7 +254,7 @@ function ProductFormContent() {
         router.push(`/product-success?id=${productId}`);
       } else {
         alert('محصول شما با موفقیت اضافه شد و به صفحه گروه این محصول نیز اضافه شد');
-        router.push('/');
+        router.push('/dashboard');
       }
     } catch (error) {
       console.error('Error:', error);

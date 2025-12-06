@@ -195,7 +195,7 @@ function ResultsContent() {
                     <p className="text-xs text-[#8E8E93]">می‌توانی محصول جدیدی ایجاد کنی یا دوباره جستجو کن</p>
                   </div>
                   <button
-                    onClick={() => router.push('/')}
+                    onClick={() => router.push('/dashboard')}
                     className="w-full sm:w-auto px-8 py-4 bg-[#1C2575] text-white text-sm font-semibold rounded-xl hover:bg-[#151d5f] transition-all"
                   >
                     <span>ایجاد محصول جدید</span>

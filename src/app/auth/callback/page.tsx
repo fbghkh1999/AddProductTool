@@ -128,7 +128,7 @@ function CallbackContent() {
           }
 
           console.log('🔄 STEP 6: Redirecting to main page');
-          router.push('/');
+          router.push('/dashboard');
         } else {
           console.error('❌ STEP 4: No access_token in response:', data);
           setError('توکن دریافت نشد');

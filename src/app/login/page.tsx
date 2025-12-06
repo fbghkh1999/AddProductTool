@@ -9,7 +9,7 @@ export default function LoginPage() {
   useEffect(() => {
     const token = localStorage.getItem('basalam_token');
     if (token) {
-      router.push('/');
+      router.push('/dashboard');
     }
   }, [router]);
 
