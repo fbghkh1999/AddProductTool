@@ -7,9 +7,11 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'statics.basalam.com',
+        pathname: '/**',
       },
     ],
     dangerouslyAllowSVG: true,
+    unoptimized: true,
   },
 };
 
