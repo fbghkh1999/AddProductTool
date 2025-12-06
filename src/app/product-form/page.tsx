@@ -79,9 +79,10 @@ function ProductFormContent() {
 
         if (data.status === 'OK' && data.result && Array.isArray(data.result)) {
           console.log('Found categories:', data.result.length);
-          setCategories(data.result.slice(0, 3));
-          if (data.result.length > 0) {
-            setFormData(prev => ({ ...prev, category_id: data.result[0].cat_id.toString() }));
+          const topCategories = data.result.slice(0, 3);
+          setCategories(topCategories);
+          if (topCategories.length > 0) {
+            setFormData(prev => ({ ...prev, category_id: topCategories[0].cat_id.toString() }));
           }
         } else {
           console.log('No categories found in response or unexpected format');
