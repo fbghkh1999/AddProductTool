@@ -36,6 +36,7 @@ function ProductFormContent() {
     primary_price: '10000',
     stock: '1',
   });
+  const [attributes, setAttributes] = useState<{ key: string; value: string }[]>([]);
 
   const [productData, setProductData] = useState<any>(null);
 
@@ -46,6 +47,9 @@ function ProductFormContent() {
         const parsed = JSON.parse(decodeURIComponent(data));
         setProductData(parsed);
         setProductName(parsed.name);
+        if (parsed.attributes && Array.isArray(parsed.attributes)) {
+          setAttributes(parsed.attributes);
+        }
       } catch (error) {
         console.error('Error parsing product data:', error);
         router.push('/dashboard');
@@ -96,6 +100,20 @@ function ProductFormContent() {
 
     fetchCategories();
   }, [productData]);
+
+  const handleAddAttribute = () => {
+    setAttributes([...attributes, { key: '', value: '' }]);
+  };
+
+  const handleRemoveAttribute = (index: number) => {
+    setAttributes(attributes.filter((_, i) => i !== index));
+  };
+
+  const handleAttributeChange = (index: number, field: 'key' | 'value', value: string) => {
+    const updated = [...attributes];
+    updated[index][field] = value;
+    setAttributes(updated);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -174,7 +192,7 @@ function ProductFormContent() {
       const createData = {
         name: productName,
         photoId,
-        attributes: productData.attributes,
+        attributes: attributes.filter(a => a.key && a.value),
         description: productData.description || '',
         category_id: parseInt(formData.category_id),
         preparation_days: parseInt(formData.preparation_days),
@@ -502,6 +520,61 @@ function ProductFormContent() {
                 />
               </div>
               </div>
+            </div>
+
+            {/* Attributes Section */}
+            <div className="bg-white rounded-2xl shadow-sm p-6">
+              <div className="flex items-center justify-between mb-4">
+                <label className="text-sm font-semibold text-[#3D3D4E]">
+                  ویژگی‌های محصول
+                </label>
+                <button
+                  type="button"
+                  onClick={handleAddAttribute}
+                  className="flex items-center gap-2 px-4 py-2 bg-[#F5F5F7] text-[#1C2575] text-sm font-medium rounded-xl hover:bg-[#E5E5EA] transition-all"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  افزودن ویژگی
+                </button>
+              </div>
+
+              {attributes.length === 0 ? (
+                <p className="text-sm text-[#8E8E93] text-center py-8">
+                  هیچ ویژگی‌ای اضافه نشده است
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {attributes.map((attr, index) => (
+                    <div key={index} className="flex items-center gap-3">
+                      <input
+                        type="text"
+                        value={attr.key}
+                        onChange={(e) => handleAttributeChange(index, 'key', e.target.value)}
+                        className="flex-1 px-4 py-3 bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl text-sm text-right focus:border-[#1C2575] focus:outline-none"
+                        placeholder="نام ویژگی"
+                      />
+                      <input
+                        type="text"
+                        value={attr.value}
+                        onChange={(e) => handleAttributeChange(index, 'value', e.target.value)}
+                        className="flex-1 px-4 py-3 bg-[#F5F5F7] border border-[#E5E5EA] rounded-xl text-sm text-right focus:border-[#1C2575] focus:outline-none"
+                        placeholder="مقدار"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveAttribute(index)}
+                        className="p-3 bg-red-100 text-red-500 rounded-xl hover:bg-red-200 transition-all"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Buttons */}
