@@ -303,47 +303,47 @@ export default function Dashboard() {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-24">
         {/* Progress Flow Indicator */}
-        <div className="w-full bg-white rounded-2xl shadow-sm p-6 mb-8">
+        <div className="w-full bg-white rounded-2xl shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
           <div className="flex items-center justify-between">
             {/* Step 1 - جستجو (Current) */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#1C2575] flex items-center justify-center">
-                <span className="text-white font-bold text-sm">1</span>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#1C2575] flex items-center justify-center flex-shrink-0">
+                <span className="text-white font-bold text-xs sm:text-sm">1</span>
               </div>
-              <span className="text-sm font-semibold text-[#1C2575]">جستجو</span>
+              <span className="text-xs sm:text-sm font-semibold text-[#1C2575] hidden sm:inline">جستجو</span>
             </div>
 
             {/* Line */}
-            <div className="flex-1 h-0.5 bg-[#E5E5EA] mx-2"></div>
+            <div className="flex-1 h-0.5 bg-[#E5E5EA] mx-1 sm:mx-2"></div>
 
             {/* Step 2 - انتخاب محصول */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#E5E5EA] flex items-center justify-center">
-                <span className="text-[#8E8E93] font-bold text-sm">2</span>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5E5EA] flex items-center justify-center flex-shrink-0">
+                <span className="text-[#8E8E93] font-bold text-xs sm:text-sm">2</span>
               </div>
-              <span className="text-sm font-semibold text-[#8E8E93]">انتخاب محصول</span>
+              <span className="text-xs sm:text-sm font-semibold text-[#8E8E93] hidden sm:inline">انتخاب محصول</span>
             </div>
 
             {/* Line */}
-            <div className="flex-1 h-0.5 bg-[#E5E5EA] mx-2"></div>
+            <div className="flex-1 h-0.5 bg-[#E5E5EA] mx-1 sm:mx-2"></div>
 
             {/* Step 3 - تکمیل اطلاعات */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#E5E5EA] flex items-center justify-center">
-                <span className="text-[#8E8E93] font-bold text-sm">3</span>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5E5EA] flex items-center justify-center flex-shrink-0">
+                <span className="text-[#8E8E93] font-bold text-xs sm:text-sm">3</span>
               </div>
-              <span className="text-sm font-semibold text-[#8E8E93]">تکمیل اطلاعات</span>
+              <span className="text-xs sm:text-sm font-semibold text-[#8E8E93] hidden sm:inline">تکمیل اطلاعات</span>
             </div>
 
             {/* Line */}
-            <div className="flex-1 h-0.5 bg-[#E5E5EA] mx-2"></div>
+            <div className="flex-1 h-0.5 bg-[#E5E5EA] mx-1 sm:mx-2"></div>
 
             {/* Step 4 - اتمام */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-[#E5E5EA] flex items-center justify-center">
-                <span className="text-[#8E8E93] font-bold text-sm">4</span>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E5E5EA] flex items-center justify-center flex-shrink-0">
+                <span className="text-[#8E8E93] font-bold text-xs sm:text-sm">4</span>
               </div>
-              <span className="text-sm font-semibold text-[#8E8E93]">اتمام</span>
+              <span className="text-xs sm:text-sm font-semibold text-[#8E8E93] hidden sm:inline">اتمام</span>
             </div>
           </div>
         </div>

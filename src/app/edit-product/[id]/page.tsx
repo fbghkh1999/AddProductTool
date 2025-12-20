@@ -135,10 +135,14 @@ export default function EditProductPage() {
       console.log('Uploaded image:', data);
 
       if (data.id && data.url) {
-        setPhotos([...photos, { id: data.id, url: data.url }]);
+        const newPhotos = [...photos, { id: data.id, url: data.url }];
+        setPhotos(newPhotos);
         if (!mainPhotoId) {
           setMainPhotoId(data.id);
         }
+        alert('تصویر با موفقیت آپلود شد');
+      } else {
+        throw new Error('پاسخ نامعتبر از سرور');
       }
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -410,11 +414,11 @@ export default function EditProductPage() {
           </div>
 
           {/* Save Button */}
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <button
               type="button"
               onClick={() => router.back()}
-              className="px-8 py-4 bg-white border border-[#E5E5EA] text-[#3D3D4E] font-semibold rounded-xl hover:bg-[#F5F5F7] transition-all"
+              className="w-full sm:w-auto px-8 py-4 bg-white border border-[#E5E5EA] text-[#3D3D4E] font-semibold rounded-xl hover:bg-[#F5F5F7] transition-all"
             >
               انصراف
             </button>

@@ -115,7 +115,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json(data);
+    // Ensure we return both id and url
+    const result = {
+      id: data.id,
+      url: data.url || data.file_url || `https://upcdn.io/12a1yek/raw/${data.id}`
+    };
+
+    console.log('Returning upload result:', result);
+
+    return NextResponse.json(result);
   } catch (error) {
     console.error('Server Error:', error);
     return NextResponse.json(
