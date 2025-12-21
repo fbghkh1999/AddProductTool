@@ -56,25 +56,46 @@ export default function EditProductPage() {
         }
 
         const data = await response.json();
-        console.log('Product data:', data);
+        console.log('Product data received:', JSON.stringify(data, null, 2));
 
         setProduct(data);
-        setName(data.name || '');
-        setDescription(data.description || '');
+
+        const productName = data.name || '';
+        const productDesc = data.description || '';
+        console.log('Setting name:', productName);
+        console.log('Setting description:', productDesc);
+
+        setName(productName);
+        setDescription(productDesc);
         setAttributes(data.attributes || []);
-        
+
         const allPhotos: { id: number; url: string }[] = [];
-        if (data.photo && data.photo.id) {
-          setMainPhotoId(data.photo.id);
-          allPhotos.push({ id: data.photo.id, url: data.photo.url });
+
+        console.log('Photo data:', data.photo);
+        console.log('Photos array:', data.photos);
+
+        if (data.photo) {
+          if (typeof data.photo === 'object' && data.photo.photo_id) {
+            setMainPhotoId(data.photo.photo_id);
+            allPhotos.push({ id: data.photo.photo_id, url: data.photo.photo_url });
+          } else if (typeof data.photo === 'object' && data.photo.id) {
+            setMainPhotoId(data.photo.id);
+            allPhotos.push({ id: data.photo.id, url: data.photo.url });
+          }
         }
+
         if (data.photos && Array.isArray(data.photos)) {
-          data.photos.forEach((p: { id: number; url: string }) => {
-            if (!allPhotos.find(ap => ap.id === p.id)) {
-              allPhotos.push(p);
+          data.photos.forEach((p: any) => {
+            const photoId = p.photo_id || p.id;
+            const photoUrl = p.photo_url || p.url;
+            if (photoId && photoUrl && !allPhotos.find(ap => ap.id === photoId)) {
+              allPhotos.push({ id: photoId, url: photoUrl });
             }
           });
         }
+
+        console.log('Total photos found:', allPhotos.length);
+        console.log('Photos:', allPhotos);
         setPhotos(allPhotos);
       } catch (error) {
         console.error('Error fetching product:', error);
@@ -308,6 +329,13 @@ export default function EditProductPage() {
                     fill
                     unoptimized
                     className="object-cover"
+                    onError={(e) => {
+                      console.error('Image load error for:', photo.url);
+                      console.error('Error details:', e);
+                    }}
+                    onLoad={() => {
+                      console.log('Image loaded successfully:', photo.url);
+                    }}
                   />
                   {mainPhotoId === photo.id && (
                     <div className="absolute top-2 right-2 px-2 py-1 bg-[#1C2575] text-white text-xs rounded-lg">
