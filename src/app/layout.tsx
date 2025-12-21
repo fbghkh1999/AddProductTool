@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { Suspense } from "react";
 import AnalyticsProvider from "@/components/AnalyticsProvider";
 import "./globals.css";
 
@@ -42,9 +43,11 @@ export default function RootLayout({
         )}
       </head>
       <body className="antialiased" style={{ fontFamily: 'Vazirmatn, sans-serif' }}>
-        <AnalyticsProvider>
-          {children}
-        </AnalyticsProvider>
+        <Suspense fallback={null}>
+          <AnalyticsProvider>
+            {children}
+          </AnalyticsProvider>
+        </Suspense>
       </body>
     </html>
   );
