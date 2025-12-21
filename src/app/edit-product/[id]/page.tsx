@@ -2,7 +2,6 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { getAccessToken } from '@/utils/auth';
 
 export const dynamic = 'force-dynamic';
@@ -60,10 +59,11 @@ export default function EditProductPage() {
 
         setProduct(data);
 
-        const productName = data.name || '';
-        const productDesc = data.description || '';
+        const productName = data.name || data.title || data.product_name || '';
+        const productDesc = data.description || data.desc || '';
         console.log('Setting name:', productName);
         console.log('Setting description:', productDesc);
+        console.log('Available fields in data:', Object.keys(data));
 
         setName(productName);
         setDescription(productDesc);
@@ -281,6 +281,32 @@ export default function EditProductPage() {
         </div>
 
         <div className="space-y-6">
+          {/* Debug Info - Remove this after fixing */}
+          <div className="bg-yellow-50 border-2 border-yellow-400 rounded-2xl shadow-sm p-6">
+            <h3 className="font-bold text-yellow-900 mb-2">Debug Info:</h3>
+            <div className="text-sm text-yellow-900 space-y-1">
+              <p><strong>Name in state:</strong> "{name}"</p>
+              <p><strong>Description in state:</strong> "{description.substring(0, 50)}{description.length > 50 ? '...' : ''}"</p>
+              <p><strong>Photos count:</strong> {photos.length}</p>
+              {product && (
+                <div className="mt-2">
+                  <strong>Raw API data fields:</strong>
+                  <pre className="bg-yellow-100 p-2 rounded mt-1 text-xs overflow-auto max-h-40">
+                    {JSON.stringify(product, null, 2)}
+                  </pre>
+                </div>
+              )}
+              {photos.length > 0 && (
+                <div>
+                  <strong>Photo URLs:</strong>
+                  <ul className="list-disc pl-5">
+                    {photos.map(p => <li key={p.id} className="break-all">{p.url}</li>)}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Product Name */}
           <div className="bg-white rounded-2xl shadow-sm p-6">
             <label className="block text-sm font-semibold text-[#3D3D4E] mb-3">
@@ -323,12 +349,10 @@ export default function EditProductPage() {
                     mainPhotoId === photo.id ? 'border-[#1C2575]' : 'border-[#E5E5EA]'
                   }`}
                 >
-                  <Image
+                  <img
                     src={photo.url}
                     alt="Product"
-                    fill
-                    unoptimized
-                    className="object-cover"
+                    className="w-full h-full object-cover"
                     onError={(e) => {
                       console.error('Image load error for:', photo.url);
                       console.error('Error details:', e);
