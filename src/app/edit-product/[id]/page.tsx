@@ -3,6 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getAccessToken } from '@/utils/auth';
+import { trackEvent } from '@/lib/analytics';
 
 export const dynamic = 'force-dynamic';
 
@@ -59,11 +60,10 @@ export default function EditProductPage() {
 
         setProduct(data);
 
-        const productName = data.name || data.title || data.product_name || '';
-        const productDesc = data.description || data.desc || '';
+        const productName = data.title || data.name || '';
+        const productDesc = data.description || '';
         console.log('Setting name:', productName);
         console.log('Setting description:', productDesc);
-        console.log('Available fields in data:', Object.keys(data));
 
         setName(productName);
         setDescription(productDesc);
@@ -74,22 +74,21 @@ export default function EditProductPage() {
         console.log('Photo data:', data.photo);
         console.log('Photos array:', data.photos);
 
-        if (data.photo) {
-          if (typeof data.photo === 'object' && data.photo.photo_id) {
-            setMainPhotoId(data.photo.photo_id);
-            allPhotos.push({ id: data.photo.photo_id, url: data.photo.photo_url });
-          } else if (typeof data.photo === 'object' && data.photo.id) {
+        if (data.photo && typeof data.photo === 'object' && data.photo.id) {
+          const photoUrl = data.photo.url || data.photo.original || data.photo.md || data.photo.sm;
+          if (photoUrl) {
             setMainPhotoId(data.photo.id);
-            allPhotos.push({ id: data.photo.id, url: data.photo.url });
+            allPhotos.push({ id: data.photo.id, url: photoUrl });
           }
         }
 
         if (data.photos && Array.isArray(data.photos)) {
           data.photos.forEach((p: any) => {
-            const photoId = p.photo_id || p.id;
-            const photoUrl = p.photo_url || p.url;
-            if (photoId && photoUrl && !allPhotos.find(ap => ap.id === photoId)) {
-              allPhotos.push({ id: photoId, url: photoUrl });
+            if (p && p.id) {
+              const photoUrl = p.url || p.original || p.md || p.sm;
+              if (photoUrl && !allPhotos.find(ap => ap.id === p.id)) {
+                allPhotos.push({ id: p.id, url: photoUrl });
+              }
             }
           });
         }
@@ -97,6 +96,12 @@ export default function EditProductPage() {
         console.log('Total photos found:', allPhotos.length);
         console.log('Photos:', allPhotos);
         setPhotos(allPhotos);
+
+        trackEvent('product_edit_loaded', {
+          product_id: params.id,
+          product_name: productName,
+          photos_count: allPhotos.length,
+        });
       } catch (error) {
         console.error('Error fetching product:', error);
         alert('خطا در دریافت اطلاعات محصول');
@@ -153,16 +158,29 @@ export default function EditProductPage() {
       }
 
       const data = await response.json();
-      console.log('Uploaded image:', data);
+      console.log('Uploaded image response:', data);
+      console.log('Image ID:', data.id);
+      console.log('Image URL:', data.url);
 
       if (data.id && data.url) {
-        const newPhotos = [...photos, { id: data.id, url: data.url }];
+        const newPhoto = { id: data.id, url: data.url };
+        console.log('Adding new photo to state:', newPhoto);
+        const newPhotos = [...photos, newPhoto];
+        console.log('Updated photos array:', newPhotos);
         setPhotos(newPhotos);
         if (!mainPhotoId) {
           setMainPhotoId(data.id);
         }
+
+        trackEvent('product_image_uploaded', {
+          product_id: params.id,
+          image_id: data.id,
+          total_photos: newPhotos.length,
+        });
+
         alert('تصویر با موفقیت آپلود شد');
       } else {
+        console.error('Invalid upload response - missing id or url:', data);
         throw new Error('پاسخ نامعتبر از سرور');
       }
     } catch (error) {
@@ -226,6 +244,14 @@ export default function EditProductPage() {
         console.error('Update error:', errorData);
         throw new Error(errorData.error || 'خطا در بروزرسانی محصول');
       }
+
+      trackEvent('product_updated', {
+        product_id: params.id,
+        product_name: name,
+        has_description: !!description,
+        photos_count: photos.length,
+        attributes_count: attributes.filter(a => a.key && a.value).length,
+      });
 
       alert('محصول با موفقیت بروزرسانی شد');
       router.push(`/product-success?id=${params.id}`);
