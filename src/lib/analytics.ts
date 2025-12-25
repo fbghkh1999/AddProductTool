@@ -4,23 +4,19 @@ import ReactGA from 'react-ga4';
 // PostHog configuration
 export const initPostHog = () => {
   if (typeof window !== 'undefined') {
-    const apiKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-    const apiHost = process.env.NEXT_PUBLIC_POSTHOG_HOST;
+    const apiKey = 'phc_l3Oko10jCpLJxPrXg6meJaFTRrMijhqVDfv3zXhMAZl';
+    const apiHost = 'https://app.posthog.com';
 
-    console.log('PostHog init - API Key:', apiKey ? apiKey.substring(0, 10) + '...' : 'MISSING');
+    console.log('PostHog init - API Key:', apiKey.substring(0, 10) + '...');
     console.log('PostHog init - API Host:', apiHost);
 
-    if (apiKey) {
-      posthog.init(apiKey, {
-        api_host: apiHost,
-        loaded: (posthog) => {
-          console.log('PostHog loaded successfully!');
-          if (process.env.NODE_ENV === 'development') posthog.debug();
-        },
-      });
-    } else {
-      console.error('PostHog API key is missing!');
-    }
+    posthog.init(apiKey, {
+      api_host: apiHost,
+      loaded: (posthog) => {
+        console.log('PostHog loaded successfully!');
+        if (process.env.NODE_ENV === 'development') posthog.debug();
+      },
+    });
   }
 };
 
