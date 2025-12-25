@@ -65,13 +65,10 @@ export async function POST(request: NextRequest) {
     const uploadFormData = new FormData();
     uploadFormData.append('file', fileToUpload);
     uploadFormData.append('file_type', 'product.photo');
-    uploadFormData.append('thumbnail', '');
-    uploadFormData.append('custom_unique_name', '');
-    uploadFormData.append('expire_minutes', '');
 
     console.log('Uploading to uploadio with file_type: product.photo');
 
-    const response = await fetch('https://uploadio.basalam.com/api_v2/files', {
+    const response = await fetch('https://uploadio.basalam.com/api_v1.0/store-file', {
       method: 'POST',
       headers: {
         'accept': 'application/json',
@@ -98,7 +95,6 @@ export async function POST(request: NextRequest) {
     try {
       data = JSON.parse(responseText);
       console.log('Uploadio full response:', JSON.stringify(data, null, 2));
-      console.log('Photo ID from uploadio:', data.id);
     } catch (e) {
       console.error('Failed to parse JSON response:', e);
       return NextResponse.json(
@@ -107,30 +103,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!data.id) {
-      console.error('WARNING: No ID in uploadio response!');
+    // Extract from new API response format: { data: { files: [{ id, url, ... }] } }
+    const files = data?.data?.files;
+    if (!files || files.length === 0) {
+      console.error('WARNING: No files in uploadio response!');
       return NextResponse.json(
-        { error: 'شناسه تصویر دریافت نشد' },
+        { error: 'فایلی در پاسخ سرور آپلود یافت نشد' },
         { status: 500 }
       );
     }
 
-    // Extract URL from various possible response structures
-    let resultUrl = data.url || data.file_url || data.original || data.md || data.sm;
-    
-    // Check for nested sizes object
-    if (!resultUrl && data.sizes) {
-      resultUrl = data.sizes.original || data.sizes.md || data.sizes.sm;
-    }
-    
-    // Fallback to Basalam's static URL format
-    if (!resultUrl) {
-      resultUrl = `https://statics.basalam.com/public/file/${data.id}/original`;
-    }
-
+    const uploadedFile = files[0];
     const result = {
-      id: data.id,
-      url: resultUrl
+      id: uploadedFile.id,
+      url: uploadedFile.url
     };
 
     console.log('Returning upload result:', result);
