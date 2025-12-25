@@ -225,31 +225,32 @@ function ProductFormContent() {
       const productId = result.id || result.product_id || result.data?.id || null;
 
       // Add product to PGP group if uuid exists
-      if (productId && productData.pgp_uuid) {
-        console.log('Adding product to PGP group:', productData.pgp_uuid);
-        try {
-          const addToGroupResponse = await fetch('/api/add-to-group', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              pgp_uuid: productData.pgp_uuid,
-              product_id: productId
-            }),
-          });
+      // COMMENTED OUT FOR NOW
+      // if (productId && productData.pgp_uuid) {
+      //   console.log('Adding product to PGP group:', productData.pgp_uuid);
+      //   try {
+      //     const addToGroupResponse = await fetch('/api/add-to-group', {
+      //       method: 'POST',
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //         'Authorization': `Bearer ${token}`,
+      //       },
+      //       body: JSON.stringify({
+      //         pgp_uuid: productData.pgp_uuid,
+      //         product_id: productId
+      //       }),
+      //     });
 
-          if (!addToGroupResponse.ok) {
-            console.error('Failed to add product to group, but product was created');
-          } else {
-            console.log('✅ Product added to PGP group successfully');
-          }
-        } catch (error) {
-          console.error('Error adding to group:', error);
-          // Don't fail the whole flow if adding to group fails
-        }
-      }
+      //     if (!addToGroupResponse.ok) {
+      //       console.error('Failed to add product to group, but product was created');
+      //     } else {
+      //       console.log('✅ Product added to PGP group successfully');
+      //     }
+      //   } catch (error) {
+      //     console.error('Error adding to group:', error);
+      //     // Don't fail the whole flow if adding to group fails
+      //   }
+      // }
 
       if (productId) {
         router.push(`/product-success?id=${productId}`);
