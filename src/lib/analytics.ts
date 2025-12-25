@@ -5,7 +5,7 @@ import ReactGA from 'react-ga4';
 export const initPostHog = () => {
   if (typeof window !== 'undefined') {
     const apiKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-    const apiHost = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://app.posthog.com';
+    const apiHost = process.env.NEXT_PUBLIC_POSTHOG_HOST;
 
     console.log('PostHog init - API Key:', apiKey ? apiKey.substring(0, 10) + '...' : 'MISSING');
     console.log('PostHog init - API Host:', apiHost);
