@@ -115,10 +115,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Ensure we return both id and url
+    // Extract URL from various possible response structures
+    let resultUrl = data.url || data.file_url || data.original || data.md || data.sm;
+    
+    // Check for nested sizes object
+    if (!resultUrl && data.sizes) {
+      resultUrl = data.sizes.original || data.sizes.md || data.sizes.sm;
+    }
+    
+    // Fallback to Basalam's static URL format
+    if (!resultUrl) {
+      resultUrl = `https://statics.basalam.com/public/file/${data.id}/original`;
+    }
+
     const result = {
       id: data.id,
-      url: data.url || data.file_url || `https://upcdn.io/12a1yek/raw/${data.id}`
+      url: resultUrl
     };
 
     console.log('Returning upload result:', result);

@@ -74,8 +74,29 @@ export default function EditProductPage() {
         console.log('Photo data:', data.photo);
         console.log('Photos array:', data.photos);
 
+        // Helper function to extract URL from photo object
+        const extractPhotoUrl = (photo: any): string | null => {
+          if (!photo) return null;
+          // Direct URL fields
+          if (photo.url) return photo.url;
+          if (photo.original) return photo.original;
+          if (photo.md) return photo.md;
+          if (photo.sm) return photo.sm;
+          // Nested sizes object
+          if (photo.sizes) {
+            if (photo.sizes.original) return photo.sizes.original;
+            if (photo.sizes.md) return photo.sizes.md;
+            if (photo.sizes.sm) return photo.sizes.sm;
+          }
+          // Fallback using ID
+          if (photo.id) {
+            return `https://statics.basalam.com/public/file/${photo.id}/original`;
+          }
+          return null;
+        };
+
         if (data.photo && typeof data.photo === 'object' && data.photo.id) {
-          const photoUrl = data.photo.url || data.photo.original || data.photo.md || data.photo.sm;
+          const photoUrl = extractPhotoUrl(data.photo);
           if (photoUrl) {
             setMainPhotoId(data.photo.id);
             allPhotos.push({ id: data.photo.id, url: photoUrl });
@@ -85,7 +106,7 @@ export default function EditProductPage() {
         if (data.photos && Array.isArray(data.photos)) {
           data.photos.forEach((p: any) => {
             if (p && p.id) {
-              const photoUrl = p.url || p.original || p.md || p.sm;
+              const photoUrl = extractPhotoUrl(p);
               if (photoUrl && !allPhotos.find(ap => ap.id === p.id)) {
                 allPhotos.push({ id: p.id, url: photoUrl });
               }
@@ -219,11 +240,16 @@ export default function EditProductPage() {
         attributes: attributes.filter(a => a.key && a.value),
       };
 
+      console.log('Current photos state:', photos);
+      console.log('Current mainPhotoId:', mainPhotoId);
+
       if (mainPhotoId) {
         updateData.photo = mainPhotoId;
       }
 
       const photoIds = photos.map(p => p.id).filter(id => id !== mainPhotoId);
+      console.log('Photo IDs (excluding main):', photoIds);
+
       if (photoIds.length > 0) {
         updateData.photos = photoIds;
       }
@@ -244,6 +270,9 @@ export default function EditProductPage() {
         console.error('Update error:', errorData);
         throw new Error(errorData.error || 'خطا در بروزرسانی محصول');
       }
+
+      const responseData = await response.json();
+      console.log('Update response from API:', responseData);
 
       trackEvent('product_updated', {
         product_id: params.id,
