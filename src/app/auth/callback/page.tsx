@@ -2,6 +2,7 @@
 
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { identifyUser } from '@/lib/analytics';
 
 export const dynamic = 'force-dynamic';
 
@@ -116,6 +117,12 @@ function CallbackContent() {
               if (profileData.vendor && profileData.vendor.id) {
                 localStorage.setItem('basalam_vendor_id', profileData.vendor.id.toString());
                 console.log('✅ Vendor ID saved:', profileData.vendor.id);
+
+                identifyUser(profileData.vendor.id.toString(), {
+                  name: profileData.vendor.name || '',
+                  email: profileData.vendor.email || '',
+                });
+                console.log('✅ User identified in PostHog');
               } else {
                 console.error('⚠️ Vendor ID not found in profile response');
               }
